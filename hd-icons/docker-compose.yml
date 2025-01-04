@@ -1,0 +1,11 @@
+version: "3"
+services:
+  HD-Icons:
+    image: xushier/hd-icons:update-v2
+    ports:
+      - 50560:50560
+    volumes:
+      - /mnt/user/appdata/HD-Icons:/app/icons
+    # 下面为环境变量，首次启动和检查更新时需要连接Github，若连接不上可将以下代理修改为自己的然后取消注释。
+    # environment:
+      # - ALL_PROXY=http://192.168.1.2:7890

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小迪的图标库</title>
+    <!-- 引入网页图标 -->
+    <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 引入自定义字体 */
+        @font-face {
+            font-family: 'ZTQXinYiJiXiangSong';
+            src: url('/static/fonts/ZTQXinYiJiXiangSong.TTF') format('truetype');
+        }
+        body {
+            font-family: 'ZTQXinYiJiXiangSong', sans-serif;
+            letter-spacing: 1.5px; /* 全局字体间距 */
+        }
+        .image-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem; /* 默认圆角 */
+            overflow: hidden;
+            background-color: white; /* 卡片背景颜色 */
+        }
+        .filename {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+            font-size: 0.75rem; /* 更小的字体 */
+            color: black; /* 卡片内字体颜色 */
+            font-weight: bold; /* 加粗 */
+        }
+        .day-mode {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb); /* 默认背景 */
+            color: #1e293b; /* 默认文字颜色 */
+        }
+        .day-mode .search-input {
+            background-color: white; /* 默认背景 */
+            color: #4c1d95; /* 深紫色文字 */
+        }
+        .day-mode .image-card {
+            background-color: white; /* 默认背景 */
+            color: #1e293b; /* 默认文字颜色 */
+        }
+        .night-mode {
+            background: linear-gradient(135deg, #4c1d95, #2d3748); /* 较深的紫色 */
+            color: #e9d8fd; /* 浅色文字 */
+        }
+        .night-mode .search-input {
+            background-color: #e9d8fd; /* 较浅的紫色 */
+            color: #4c1d95; /* 深紫色文字 */
+        }
+        .night-mode .image-card {
+            background-color: #e9d8fd; /* 较浅的紫色 */
+            color: #4c1d95; /* 较深的紫色 */
+        }
+        .night-mode .intro-text {
+            color: #e9d8fd; /* 夜间模式介绍文字颜色 */
+            font-weight: bold; /* 加粗 */
+        }
+        .night-mode .text-xl {
+            color: #e9d8fd; /* 左上角logo夜间模式为浅色 */
+        }
+        .status-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.3rem 0.8rem 0.3rem !important;
+            border-radius: 1rem !important;
+            background-color: #6b46c1; /* 紫色按钮 */
+            color: white;
+            font-weight: 500;
+            margin: 0.25rem;
+        }
+        .feedback-button {
+            background-color: #e53e3e; /* 红色按钮 */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .feedback-button:hover {
+            background-color: #c53030; /* 悬停时颜色变深 */
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 1000;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        .popup.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .overlay.active {
+            opacity: 1;
+        }
+        .copy-success {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #7e22ce;
+            color: white;
+            padding: 0.4rem 1rem 0.5rem 1rem;
+            border-radius: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .copy-success.active {
+            opacity: 1;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease; /* 加长动画时间 */
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #6b46c1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* 左上角图标按钮样式 */
+        .icon-buttons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.75);
+            border-bottom-right-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .icon-buttons a {
+            color: #4a5568; /* 默认颜色 */
+            transition: color 0.3s ease;
+        }
+        .icon-buttons a:hover {
+            color: #6b46c1; /* 悬停颜色 */
+        }
+        /* 按钮内边距和圆角 */
+        button {
+            padding: 0.3rem 0.8rem 0.3rem !important;
+            border-radius: 1rem !important;
+        }
+        /* .mb-6 的下外边距改为 1rem */
+        .mb-6 {
+            margin-bottom: 1rem !important;
+        }
+        
+        /* 左上角图标大小改为 1rem */
+        .fab, .fas {
+            font-size: 1rem !important;
+        }
+
+        .night-mode footer {
+            color: #e9d8fd; /* 夜间模式文字颜色 */
+        }
+
+        /* 手机端隐藏按钮文字 */
+        @media (max-width: 768px) {
+            #check-update span,
+            #toggle-mode span {
+                display: none;
+            }
+            /* 手机端隐藏分类按钮图标 */
+            .category-button i {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="p-6 day-mode">
+    <!-- 左上角图标按钮 -->
+    <div class="flex items-center space-x-4 mb-4">
+        <a href="https://github.com/xushier/HD-Icons" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fab fa-github text-xl"></i>
+        </a>
+        <a href="https://space.bilibili.com/32313260" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fab fa-bilibili text-xl"></i>
+        </a>
+        <a href="https://link3.cc/xiaoditx" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fab fa-weixin text-xl"></i>
+        </a>
+        <a href="https://www.youtube.com/@xiaoditx" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fab fa-youtube text-xl"></i>
+        </a>
+        <a href="https://www.douyin.com/user/MS4wLjABAAAAN_vmSoRblD35MRz3KfHsN-bDKyW3tpq-jWk7N7cg3NggEo5ZeVkMWx_X2jK_PYzo" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fab fa-tiktok text-xl"></i>
+        </a>
+        <a href="https://zhiyou.smzdm.com/member/9985726306" target="_blank" class="text-gray-700 hover:text-purple-600">
+            <i class="fas fa-shopping-cart text-xl"></i>
+        </a>
+    </div>
+
+    <!-- 检查更新和模式切换 -->
+    <div class="flex justify-end mb-4 space-x-4 absolute top-0 right-0 p-4">
+        <button id="toggle-mode" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <i class="fas fa-moon"></i>
+            <span class="hidden md:inline">夜间模式</span>
+        </button>
+        <button id="check-update" class="p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+            <i class="fas fa-sync"></i>
+            <span class="hidden md:inline">检查更新</span>
+        </button>
+    </div>
+
+    <!-- 标题和介绍 -->
+    <div class="text-center mb-6">
+        <h1 class="text-5xl font-bold">小迪的图标库</h1>
+        <p class="text-xl intro-text mt-2 font-bold">单击复制地址·悬停放大查看</p>
+    </div>
+    
+    <!-- 搜索框 -->
+    <div class="flex items-center justify-center space-x-4 mb-6">
+        <input type="text" id="search" placeholder="输入关键词，回车搜索" class="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 search-input font-bold" onkeypress="handleKeyPress(event)" style="padding: 0.3rem 0.8rem !important; border-radius: 1rem !important;">
+        <button onclick="loadImages()" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <i class="fas fa-search"></i> 搜索
+        </button>
+    </div>
+
+    <!-- 分类按钮 -->
+    <div class="flex items-center justify-center space-x-4 mb-4">
+        <button id="btn-all" onclick="setImageType('all')" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 category-button">
+            <i class="fas fa-grip-lines"></i> 所有
+        </button>
+        <button id="btn-border-radius" onclick="setImageType('border-radius')" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 category-button">
+            <i class="fas fa-square"></i> 圆角
+        </button>
+        <button id="btn-circle" onclick="setImageType('circle')" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 category-button">
+            <i class="fas fa-circle"></i> 圆形
+        </button>
+        <button id="btn-svg" onclick="setImageType('svg')" class="p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 category-button">
+            <i class="fas fa-arrow-right"></i> 矢量
+        </button>
+    </div>
+
+    <!-- 分隔线 -->
+    <div class="border-b border-gray-400 mb-3"></div>
+
+    <!-- 状态显示 -->
+    <div id="status" class="flex items-center justify-center mb-3"></div>
+    
+    <!-- 图片容器 -->
+    <div id="image-container" class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-10 gap-2"></div>
+
+    <script>
+        let currentImageType = 'all';
+        let currentSearchQuery = '';
+
+        // 类别映射
+        const categoryMap = {
+            'all': '所有',
+            'border-radius': '圆角',
+            'circle': '圆形',
+            'svg': '矢量'
+        };
+
+        // 设置图片类型
+        function setImageType(type) {
+            currentImageType = type;
+            currentSearchQuery = '';
+            document.getElementById('search').value = '';
+            updateButtonState(type);
+            loadImages();
+        }
+
+        // 更新按钮状态
+        function updateButtonState(selectedType) {
+            const buttons = ['all', 'border-radius', 'circle', 'svg'];
+            buttons.forEach(button => {
+                const btnElement = document.getElementById(`btn-${button}`);
+                if (button === selectedType) {
+                    btnElement.classList.add('bg-fuchsia-600');
+                } else {
+                    btnElement.classList.remove('bg-fuchsia-600');
+                }
+            });
+        }
+
+        // 加载图片
+        function loadImages() {
+            const search = document.getElementById('search').value;
+            currentSearchQuery = search;
+            fetch(`/images?type=${currentImageType}&search=${search}`)
+                .then(response => response.json())
+                .then(images => {
+                    const container = document.getElementById('image-container');
+                    container.innerHTML = '';
+                    images.forEach(img => {
+                        const imgElement = document.createElement('img');
+                        // SVG 文件直接加载原图，其他文件加载缩略图
+                        const isSvg = img.name.toLowerCase().endsWith('.svg');
+                        const imageUrl = isSvg
+                            ? `${window.location.origin}/icons/HD-Icons/${img.type}/${img.name}`
+                            : `${window.location.origin}/icons/thumbnails/${img.type}/${img.name}`;
+                        imgElement.src = imageUrl;
+                        imgElement.dataset.original = `${window.location.origin}/icons/HD-Icons/${img.type}/${img.name}`; // 保存原图路径
+                        imgElement.classList.add('w-16', 'h-16', 'object-cover', 'cursor-pointer', 'lazy');
+
+                        const filenameDiv = document.createElement('div');
+                        filenameDiv.textContent = img.name;
+                        filenameDiv.classList.add('filename', 'text-center', 'mt-2', 'px-2', 'py-1');
+
+                        const imageWrapper = document.createElement('div');
+                        imageWrapper.classList.add('image-card', 'flex', 'flex-col', 'items-center', 'p-2', 'rounded-lg', 'relative', 'fade-in');
+                        imageWrapper.appendChild(imgElement);
+                        imageWrapper.appendChild(filenameDiv);
+
+                        // 复制成功提示
+                        const copySuccess = document.createElement('div');
+                        copySuccess.classList.add('copy-success');
+                        copySuccess.textContent = '复制成功';
+                        imageWrapper.appendChild(copySuccess);
+
+                        // 鼠标悬停弹窗显示原图
+                        let hoverTimer;
+                        let popup, overlay;
+                        imageWrapper.addEventListener('mouseenter', () => {
+                            hoverTimer = setTimeout(() => {
+                                popup = document.createElement('div');
+                                popup.classList.add('popup');
+                                const popupImg = document.createElement('img');
+                                popupImg.src = imgElement.dataset.original; // 使用原图
+                                popup.appendChild(popupImg);
+
+                                overlay = document.createElement('div');
+                                overlay.classList.add('overlay');
+
+                                document.body.appendChild(overlay);
+                                document.body.appendChild(popup);
+
+                                // 添加动画
+                                setTimeout(() => {
+                                    popup.classList.add('active');
+                                    overlay.classList.add('active');
+                                }, 10);
+
+                                // 点击任意位置关闭弹窗
+                                overlay.addEventListener('click', () => {
+                                    popup.classList.remove('active');
+                                    overlay.classList.remove('active');
+                                    setTimeout(() => {
+                                        document.body.removeChild(overlay);
+                                        document.body.removeChild(popup);
+                                    }, 300);
+                                });
+                            }, 1200); // 悬停等待 1.2 秒
+                        });
+
+                        // 鼠标离开时取消悬停计时器
+                        imageWrapper.addEventListener('mouseleave', () => {
+                            clearTimeout(hoverTimer);
+                        });
+
+                        // 初始化 clipboard.js
+                        new ClipboardJS(imageWrapper, {
+                            text: function () {
+                                return imgElement.dataset.original; // 复制原图地址
+                            }
+                        }).on('success', function () {
+                            copySuccess.classList.add('active');
+                            setTimeout(() => {
+                                copySuccess.classList.remove('active');
+                            }, 2000);
+                        });
+
+                        container.appendChild(imageWrapper);
+                    });
+
+                    // 更新状态显示
+                    updateStatus(images.length);
+
+                    // 初始化懒加载
+                    initLazyLoad();
+                });
+        }
+
+        // 初始化懒加载
+        function initLazyLoad() {
+            const lazyImages = document.querySelectorAll('img.lazy');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.original; // 加载原图
+                        img.classList.remove('lazy');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => {
+                observer.observe(img);
+            });
+        }
+
+        // 更新状态显示
+        function updateStatus(count) {
+            const statusElement = document.getElementById('status');
+            if (currentSearchQuery) {
+                if (count > 0) {
+                    statusElement.innerHTML = `
+                        <div class="status-button">共搜索到 ${count} 个</div>
+                    `;
+                } else {
+                    statusElement.innerHTML = `
+                        <div class="status-button">未找到，试试更短的关键词？</div>
+                        <a href="https://github.com/xushier/HD-Icons/issues/new/choose" target="_blank" class="status-button feedback-button">向作者反馈</a>
+                    `;
+                }
+            } else {
+                statusElement.innerHTML = `
+                    <div class="status-button">当前类别：${categoryMap[currentImageType]}</div>
+                    <div class="status-button">共有 ${count} 个</div>
+                `;
+            }
+        }
+
+        // 处理回车键
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                loadImages();
+            }
+        }
+
+        // 切换日间/夜间模式
+        function toggleMode() {
+            const body = document.body;
+            const toggleButton = document.getElementById('toggle-mode');
+            if (body.classList.contains('day-mode')) {
+                body.classList.remove('day-mode');
+                body.classList.add('night-mode');
+                toggleButton.innerHTML = '<i class="fas fa-sun"></i><span class="hidden md:inline">日间模式</span>';
+            } else {
+                body.classList.remove('night-mode');
+                body.classList.add('day-mode');
+                toggleButton.innerHTML = '<i class="fas fa-moon"></i><span class="hidden md:inline">夜间模式</span>';
+            }
+        }
+
+        // 检测系统主题偏好并自动切换模式
+        function autoToggleMode() {
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const body = document.body;
+            const toggleButton = document.getElementById('toggle-mode');
+
+            if (isDarkMode) {
+                body.classList.remove('day-mode');
+                body.classList.add('night-mode');
+                toggleButton.innerHTML = '<i class="fas fa-sun"></i><span class="hidden md:inline">日间模式</span>';
+            } else {
+                body.classList.remove('night-mode');
+                body.classList.add('day-mode');
+                toggleButton.innerHTML = '<i class="fas fa-moon"></i><span class="hidden md:inline">夜间模式</span>';
+            }
+        }
+
+        // 检查更新
+        function checkForUpdates() {
+            fetch('/check-update')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.status);
+                });
+        }
+
+        // 定期自动检查更新
+        function autoCheckUpdates() {
+            setInterval(() => {
+                checkForUpdates();
+            }, 3600000); // 每小时检查一次
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function () {
+            // 自动切换模式
+            autoToggleMode();
+
+            // 监听系统主题变化
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                autoToggleMode();
+            });
+
+            // 默认加载所有图片
+            loadImages();
+
+            // 绑定模式切换按钮
+            document.getElementById('toggle-mode').addEventListener('click', toggleMode);
+
+            // 绑定检查更新按钮
+            document.getElementById('check-update').addEventListener('click', checkForUpdates);
+
+            // 初始化按钮状态
+            updateButtonState(currentImageType);
+            
+            // 启动自动检查更新
+            autoCheckUpdates();
+        });
+    </script>
+    <!-- 页脚 -->
+    <footer class="text-center py-4 mt-8 text-sm text-gray-600">
+        Copyright © 2025 Powered By 小迪同学 All Rights Reserved.
+    </footer>
+</body>
+</html>
