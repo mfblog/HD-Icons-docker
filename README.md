@@ -33,7 +33,7 @@
 
 ## 使用
 
-项目已打包为 Docker 镜像，并推送到了 Github 和 DockerHub。Github 镜像为 ghcr.io/xushier/hd-icons:latest，DockerHub 镜像为 **xiaodid/hd-icons:latest** 或 **xushier/hd-icons:latest**，任选一个使用。
+项目已打包为 Docker 镜像，并推送到了 Github 和 DockerHub。Github 镜像为 `ghcr.io/xushier/hd-icons:latest`，DockerHub 镜像为 `xiaodid/hd-icons:latest` 或 `xushier/hd-icons:latest`，任选一个使用。
 
 首次安装后需**等待图标拉取完毕**，之后才能访问界面，若网络环境不好，可以考虑添加 **ALL_PROXY** 环境变量来设置 **HTTP 代理**。
 
