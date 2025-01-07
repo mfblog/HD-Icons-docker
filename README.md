@@ -31,7 +31,7 @@
 
 ![单击复制地址](preview/copy.png)
 
-## 使用
+## 用法
 
 项目已打包为 Docker 镜像，并推送到了 Github 和 DockerHub。Github 镜像为 ```ghcr.io/xushier/hd-icons:latest```，DockerHub 镜像为 ```xiaodid/hd-icons:latest``` 或 ```xushier/hd-icons:latest```，任选一个使用。
 
@@ -63,6 +63,26 @@ services:
 Unraid 安装：
 
 ![Unraid 安装](preview/unraid.png)
+
+## 更新日志
+
+### v3
+
+- 悬浮放大修改为放大按钮，避免频繁误触放大；
+- 添加自定义图片上传和删除功能。支持多图上传，图片格式支持 ；`png,jpg,jpeg,gif,ico,bmp,svg,tif,tiff,bmp,apng`，删除需要二次确认；
+- 添加浏览器的 PWA(渐进式网页应用) 支持。
+
+### v2
+
+添加自动、手动和定时更新图标功能，同步 HD-Icons 图标库的图标。
+
+### v1
+
+- 图标展示；
+- 图标悬浮放大；
+- 图标单击复制；
+- 图标搜索；
+- 日间、夜间模式切换。
 
 ## 赞助（备注：图标）
 <img src="preview/wechat.jpg" alt="wechat" width="400" height="600"><img src="preview/alipay.jpg" alt="alipay" width="400" height="600">

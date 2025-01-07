@@ -1,7 +1,7 @@
 version: "3"
 services:
   HD-Icons:
-    image: xushier/hd-icons:update-v2
+    image: xushier/hd-icons:latest
     ports:
       - 50560:50560
     volumes:

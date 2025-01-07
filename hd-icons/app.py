@@ -12,11 +12,23 @@ ICONS_DIR = os.path.join(os.getcwd(), 'icons')
 
 # 图标文件夹映射
 IMAGE_FOLDERS = {
-    'all': ['border-radius', 'circle', 'svg'],  # 所有图标
+    'all': ['border-radius', 'circle', 'svg', 'upload'],  # 所有图标
     'border-radius': os.path.join(ICONS_DIR, 'HD-Icons', 'border-radius'),  # 圆角图标
     'circle': os.path.join(ICONS_DIR, 'HD-Icons', 'circle'),                # 圆形图标
-    'svg': os.path.join(ICONS_DIR, 'HD-Icons', 'svg')                       # 矢量图标
+    'svg': os.path.join(ICONS_DIR, 'HD-Icons', 'svg'),                      # 矢量图标
+    'upload': os.path.join(ICONS_DIR, 'upload')                             # 自定义上传图标
 }
+
+# 设置静态文件路径
+app.static_folder = 'static'
+
+# 提供静态文件
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    try:
+        return send_from_directory(app.static_folder, filename)
+    except FileNotFoundError:
+        return "文件未找到", 404
 
 # 提供 icons 文件夹中的静态文件
 @app.route('/icons/<path:subpath>')
@@ -64,7 +76,7 @@ def auto_check_updates():
 def init_icons_repo():
     if not os.path.exists(ICONS_DIR):
         os.makedirs(ICONS_DIR)
-    if not os.listdir(ICONS_DIR):
+    if not os.path.exists(os.path.join(ICONS_DIR, 'HD-Icons')):
         print("icons 文件夹为空，正在克隆 HD-Icons 仓库...")
         proxy = os.getenv('all_proxy')
         if proxy:
@@ -73,20 +85,33 @@ def init_icons_repo():
             subprocess.run(['git', 'config', '--global', 'https.proxy', proxy])
         subprocess.run(['git', 'clone', 'https://github.com/xushier/HD-Icons.git', os.path.join(ICONS_DIR, 'HD-Icons')])
 
+    # 创建 upload 文件夹
+    upload_dir = os.path.join(ICONS_DIR, 'upload')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+
     # 初始化缩略图
     generate_thumbnails_for_all_images()
 
 # 为所有图片生成缩略图
 def generate_thumbnails_for_all_images():
     for image_type in IMAGE_FOLDERS['all']:
-        image_dir = os.path.join(ICONS_DIR, 'HD-Icons', image_type)
+        image_dir = os.path.join(ICONS_DIR, 'HD-Icons', image_type) if image_type != 'upload' else os.path.join(ICONS_DIR, 'upload')
         thumbnail_dir = os.path.join(ICONS_DIR, 'thumbnails', image_type)
+
+        # 如果文件夹不存在，跳过
+        if not os.path.exists(image_dir):
+            print(f"文件夹 {image_dir} 不存在，跳过生成缩略图。")
+            continue
+
+        # 创建缩略图文件夹
         if not os.path.exists(thumbnail_dir):
             os.makedirs(thumbnail_dir)
 
+        # 生成缩略图
         for image_name in os.listdir(image_dir):
             # 不对 SVG 文件生成缩略图
-            if image_name.lower().endswith(('.png', '.jpg', '.jpeg')):
+            if image_name.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp', '.tiff', '.ico', '.tif')):
                 image_path = os.path.join(image_dir, image_name)
                 thumbnail_path = os.path.join(thumbnail_dir, image_name)
                 if not os.path.exists(thumbnail_path):
@@ -109,14 +134,14 @@ def get_images():
         # 动态合并所有子文件夹中的图片
         images = []
         for subfolder in IMAGE_FOLDERS['all']:
-            subfolder_path = os.path.join(ICONS_DIR, 'HD-Icons', subfolder)
+            subfolder_path = os.path.join(ICONS_DIR, 'HD-Icons', subfolder) if subfolder != 'upload' else os.path.join(ICONS_DIR, 'upload')
             if os.path.exists(subfolder_path):
-                images.extend([{"name": img, "type": subfolder} for img in os.listdir(subfolder_path) if img.lower().endswith(('.png', '.jpg', '.jpeg', '.svg')) and search_query in img.lower()])
+                images.extend([{"name": img, "type": subfolder} for img in os.listdir(subfolder_path) if img.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.bmp', '.tiff', '.apng', '.ico', '.tif')) and search_query in img.lower()])
     else:
         # 读取指定文件夹中的图片
         folder = IMAGE_FOLDERS.get(image_type)
         if folder and os.path.exists(folder):
-            images = [{"name": img, "type": image_type} for img in os.listdir(folder) if img.lower().endswith(('.png', '.jpg', '.jpeg', '.svg')) and search_query in img.lower()]
+            images = [{"name": img, "type": image_type} for img in os.listdir(folder) if img.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.bmp', '.tiff', '.apng', '.ico', '.tif')) and search_query in img.lower()]
         else:
             images = []
     return jsonify(images)
@@ -127,6 +152,66 @@ def check_update():
         return jsonify({'status': '有更新'})
     else:
         return jsonify({'status': '无更新'})
+
+@app.route('/delete-image', methods=['POST'])
+def delete_image():
+    data = request.json
+    image_name = data['image_name']
+    
+    # 原始文件路径
+    original_path = os.path.join(ICONS_DIR, 'upload', image_name)
+    
+    # 缩略图文件路径
+    thumbnail_path = os.path.join(ICONS_DIR, 'thumbnails', 'upload', image_name)
+    
+    # 标记是否删除成功
+    success = False
+    
+    # 删除原始文件
+    if os.path.exists(original_path):
+        try:
+            os.remove(original_path)
+            success = True
+        except Exception as e:
+            print(f"删除原始文件时出错: {e}")
+            return jsonify({'status': 'error', 'message': '删除原始文件失败'})
+    
+    # 删除缩略图文件
+    if os.path.exists(thumbnail_path):
+        try:
+            os.remove(thumbnail_path)
+            success = True
+        except Exception as e:
+            print(f"删除缩略图文件时出错: {e}")
+            return jsonify({'status': 'error', 'message': '删除缩略图文件失败'})
+    
+    # 如果没有任何文件被删除
+    if not success:
+        return jsonify({'status': 'error', 'message': '文件不存在'})
+    
+    return jsonify({'status': 'success'})
+
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    if 'file' not in request.files:
+        return jsonify({'status': 'error', 'message': '没有文件上传'})
+    
+    files = request.files.getlist('file')  # 获取所有文件
+    if not files:
+        return jsonify({'status': 'error', 'message': '没有选择文件'})
+    
+    upload_dir = os.path.join(ICONS_DIR, 'upload')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    
+    for file in files:
+        if file.filename != '':
+            file.save(os.path.join(upload_dir, file.filename))
+    
+    # 生成缩略图
+    generate_thumbnails_for_all_images()
+    
+    return jsonify({'status': 'success', 'message': '文件上传成功'})
 
 if __name__ == '__main__':
     # 初始化图标库
