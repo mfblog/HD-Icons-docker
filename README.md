@@ -40,7 +40,12 @@
 docker run 安装：
 
 ```bash
-docker run --name=HD-Icons -p 50560:50560 -v /mnt/user/appdata/HD-Icons:/app/icons --restart=always xushier/hd-icons:latest
+docker run -d \
+  --name=HD-Icons \
+  -p 50560:50560 \
+  -v /mnt/user/appdata/HD-Icons:/app/icons \
+  --restart=always \
+  xushier/hd-icons:latest
 ```
 
 docker-compose 安装：
