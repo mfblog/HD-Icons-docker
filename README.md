@@ -17,23 +17,23 @@
 
 #### 日间模式
 
-![日间模式](preview/day.png){:.center}
+![日间模式](preview/day.png){align=center}
 
 #### 夜间模式
 
-![夜间模式](preview/night.png){:.center}
+![夜间模式](preview/night.png){align=center}
 
 #### 移动端自适应
 
-![移动端自适应](preview/mobile.png){:.center}
+![移动端自适应](preview/mobile.png){align=center}
 
 #### 单击复制地址
 
-![单击复制地址](preview/copy.png){:.center}
+![单击复制地址](preview/copy.png){align=center}
 
 #### 自定义图片上传
 
-![自定义图片上传](preview/upload.png){:.center}
+![自定义图片上传](preview/upload.png){align=center}
 
 ## 用法
 
