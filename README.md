@@ -32,7 +32,7 @@
 
 #### 单击复制地址
 <p align="center">
-<center><img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;">
+<img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;">
 </p>
 
 #### 自定义图片上传
