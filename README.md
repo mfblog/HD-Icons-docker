@@ -16,8 +16,7 @@
 ## 预览
 
 #### 日间模式
-
-![日间模式](preview/day.png){align=center}
+<center><img src="preview/day.png" alt="日间模式" style="max-width:100%;height:auto;"></center>
 
 #### 夜间模式
 
