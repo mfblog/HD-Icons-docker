@@ -19,20 +19,16 @@
 <center><img src="preview/day.png" alt="日间模式" style="max-width:100%;height:auto;"></center>
 
 #### 夜间模式
-
-![夜间模式](preview/night.png){align=center}
+<center><img src="preview/night.png" alt="夜间模式" style="max-width:100%;height:auto;"></center>
 
 #### 移动端自适应
-
-![移动端自适应](preview/mobile.png){align=center}
+<center><img src="preview/mobile.png" alt="移动端自适应" style="max-width:100%;height:auto;"></center>
 
 #### 单击复制地址
-
-![单击复制地址](preview/copy.png){align=center}
+<center><img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;"></center>
 
 #### 自定义图片上传
-
-![自定义图片上传](preview/upload.png){align=center}
+<center><img src="preview/upload.png" alt="自定义图片上传" style="max-width:100%;height:auto;"></center>
 
 ## 用法
 
