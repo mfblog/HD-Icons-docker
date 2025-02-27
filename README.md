@@ -17,19 +17,23 @@
 
 #### 日间模式
 
-![日间模式](preview/day.png)
+![日间模式](preview/day.png){:.center}
 
 #### 夜间模式
 
-![夜间模式](preview/night.png)
+![夜间模式](preview/night.png){:.center}
 
 #### 移动端自适应
 
-![移动端自适应](preview/mobile.png)
+![移动端自适应](preview/mobile.png){:.center}
 
 #### 单击复制地址
 
-![单击复制地址](preview/copy.png)
+![单击复制地址](preview/copy.png){:.center}
+
+#### 自定义图片上传
+
+![自定义图片上传](preview/upload.png){:.center}
 
 ## 用法
 
