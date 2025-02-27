@@ -22,7 +22,7 @@
 <center><img src="preview/night.png" alt="夜间模式" style="max-width:100%;height:auto;"></center>
 
 #### 移动端自适应
-<center><img src="preview/mobile.png" alt="移动端自适应" style="max-width:100%;height:auto;"></center>
+<center><img src="preview/mobile.png" alt="移动端自适应" style="max-width:100%;height:auto;" align="center"></center>
 
 #### 单击复制地址
 <center><img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;"></center>
