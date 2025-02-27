@@ -21,18 +21,24 @@
 </p>
 
 #### 夜间模式
-<center><img src="preview/night.png" alt="夜间模式" style="max-width:100%;height:auto;"></center>
+<p align="center">
+<img src="preview/night.png" alt="夜间模式" style="max-width:100%;height:auto;">
+</p>
 
 #### 移动端自适应
 <p align="center">
-<img src="preview/mobile.png" alt="移动端自适应" style="max-width:100%;height:auto;" align="center">
+<img src="preview/mobile.png" alt="移动端自适应" style="max-width:100%;height:auto;">
 </p>
 
 #### 单击复制地址
-<center><img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;"></center>
+<p align="center">
+<center><img src="preview/copy.png" alt="单击复制地址" style="max-width:100%;height:auto;">
+</p>
 
 #### 自定义图片上传
-<center><img src="preview/upload.png" alt="自定义图片上传" style="max-width:100%;height:auto;"></center>
+<p align="center">
+<img src="preview/upload.png" alt="自定义图片上传" style="max-width:100%;height:auto;">
+</p>
 
 ## 用法
 
