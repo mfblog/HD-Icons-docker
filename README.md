@@ -78,9 +78,12 @@ services:
     volumes:
       - /mnt/user/appdata/HD-Icons:/app/icons
     # environment:
-    #   - ALL_PROXY=http://192.168.1.2:7890  # 网络不好可添加 ALL_PROXY 变量设置 HTTP 代理，换一下地址和端口即可。
-    #   - CUSTOM_URL=http://xxx.xxx.xxx/icons/HD-Icons  # 自定义复制地址的前缀，若不填且切换到了云端模式则默认为 HD-Icons 项目图标真实地址前缀。
-    #   - TITLE=小迪的图标库  # 自定义标题和网页标签页，不填默认为“小迪的图标库”。
+    #   首次使用日志若一直显示卡在git clone，或者后续更新一直出错，那么是网络无法连接github，可添加 ALL_PROXY 变量设置 HTTP 代理解决，将下面的 http://192.168.1.2:7890 换一下地址和端口即可。
+    #   - ALL_PROXY=http://192.168.1.2:7890
+    #   自定义复制地址的前缀，若不填且切换到了云端模式则默认为 HD-Icons 项目图标真实地址前缀。
+    #   - CUSTOM_URL=http://xxx.xxx.xxx/icons/HD-Icons
+    #   自定义标题和网页标签页，不填默认为“小迪的图标库”。
+    #   - TITLE=小迪的图标库
 ```
 
 ### Unraid 安装：
