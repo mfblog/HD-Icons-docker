@@ -78,7 +78,7 @@ services:
       - 50560:50560
     volumes:
       - /mnt/user/appdata/HD-Icons/icons:/app/icons
-      # 若需要自定义字体可添加映射/app/font路径，在对应主机路径下放入字体文件，font_zh.ttf为中文，font_en.ttf为英文。然后ctrl+F5强制刷新首页，或者重启容器生效。
+      # 若需要自定义字体可添加映射/app/static/font路径，在对应主机路径下放入字体文件，font_zh.ttf为中文，font_en.ttf为英文。然后ctrl+F5强制刷新首页生效，或者重启容器生效。
       #- /mnt/user/appdata/HD-Icons/font:/app/static/font
     # environment:
     #   首次使用日志若一直显示卡在git clone，或者后续更新一直出错，那么是网络无法连接github，可添加 ALL_PROXY 变量设置 HTTP 代理解决，将下面的 http://192.168.1.2:7890 换一下地址和端口即可。
